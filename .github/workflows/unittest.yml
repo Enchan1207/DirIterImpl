@@ -1,0 +1,65 @@
+#
+# Build project with different platforms and build systems using CMake
+#
+name: Build projects
+
+on: push
+jobs:
+  build:
+    name: ${{ matrix.config.name }}
+    runs-on: ${{ matrix.config.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - {
+              name: "Windows (MSVC)",
+              os: windows-latest,
+              generator: "Visual Studio 17 2022",
+              testfile_execution: ".\\tests\\Debug\\iterdir_test.exe",
+              artifact_name: "win-msvc",
+            }
+          - {
+              name: "Windows (MinGW)",
+              os: windows-latest,
+              generator: "MinGW Makefiles",
+              testfile_execution: ".\\tests\\iterdir_test.exe",
+              artifact_name: "win-mingw",
+            }
+          - {
+              name: "Ubuntu (gcc)",
+              os: ubuntu-latest,
+              generator: "Unix Makefiles",
+              testfile_execution: "./tests/iterdir_test",
+              artifact_name: "ubuntu-gcc",
+            }
+          - {
+              name: "macOS (clang)",
+              os: macos-latest,
+              generator: "Unix Makefiles",
+              testfile_execution: "./tests/iterdir_test",
+              artifact_name: "mac-clang",
+            }
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Configure CMake with release build configuration
+        run: |
+          mkdir build
+          cd build
+          cmake -G "${{ matrix.config.generator }}" -DCMAKE_BUILD_TYPE=Release ..
+
+      - name: Build projects
+        working-directory: ${{github.workspace}}/build
+        run: cmake --build .
+
+      - name: Run test
+        working-directory: ${{github.workspace}}/build
+        run: ${{ matrix.config.testfile_execution }}
+
+      - name: Upload built modules as artifact
+        uses: actions/upload-artifact@v3.1.1
+        with:
+          name: ${{ matrix.config.artifact_name }}
+          path: ./build/src
