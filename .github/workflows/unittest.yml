@@ -20,13 +20,6 @@ jobs:
               artifact_name: "win-msvc",
             }
           - {
-              name: "Windows (MinGW)",
-              os: windows-latest,
-              generator: "MinGW Makefiles",
-              testfile_execution: ".\\tests\\iterdir_test.exe",
-              artifact_name: "win-mingw",
-            }
-          - {
               name: "Ubuntu (gcc)",
               os: ubuntu-latest,
               generator: "Unix Makefiles",
