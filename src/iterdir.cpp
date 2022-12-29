@@ -3,16 +3,9 @@
 //
 #include "iterdir.hpp"
 
-#include <time.h>
-
-#include <chrono>
-#include <ctime>
-#include <iostream>
-#include <set>
-
 namespace fs = std::filesystem;
 
-int iterdir(const fs::path& targetPath) {
+int iterdir(const fs::path& targetPath, std::ostream& output) {
     if (!fs::exists(targetPath)) {
         std::cerr << "Error! Specified path " << targetPath << " not exists." << std::endl;
         return 1;
@@ -23,11 +16,11 @@ int iterdir(const fs::path& targetPath) {
         return 1;
     }
 
-    std::cout << "Contents of " << fs::canonical(targetPath).string() << ":" << std::endl;
+    output << "Contents of " << fs::canonical(targetPath).string() << ":" << std::endl;
 
     fs::directory_iterator contentsOfDirectory(targetPath);
     for (const auto& entry : contentsOfDirectory) {
-        std::cout << entry.path().filename().string() << std::endl;
+        output << entry.path().filename().string() << std::endl;
     }
     return 0;
 }

@@ -16,7 +16,7 @@ int main(int argc, char const *argv[]) {
     }
 
     // ディレクトリのイテレーションを実行
-    const int result = iterdir(std::filesystem::path(pathStr));
+    const int result = iterdir(std::filesystem::path(pathStr), std::cout);
     if (result != 0) {
         std::cerr << "An error occured during process." << std::endl;
         return result;
