@@ -12,8 +12,9 @@
  *
  * @param path パス
  * @param output 出力先ストリーム
+ * @param sorted 出力を辞書順ソートするかどうか
  * @return int 処理結果
  */
-int iterdir(const std::filesystem::path& targetPath, std::ostream& output);
+int iterdir(const std::filesystem::path& targetPath, std::ostream& output, bool sorted);
 
 #endif /* ITERDIR_H */
