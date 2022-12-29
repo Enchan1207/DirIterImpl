@@ -55,4 +55,6 @@ jobs:
         uses: actions/upload-artifact@v3.1.1
         with:
           name: ${{ matrix.config.artifact_name }}
-          path: ./build/src
+          path: |
+            ./build/src
+            unittest.log
